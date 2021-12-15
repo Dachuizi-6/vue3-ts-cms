@@ -5,6 +5,8 @@ import store from './store'
 
 import zwRequest from './services'
 
+// import './assets/css/index.less'
+
 // import './services/axios.demo'
 
 const app = createApp(App)
@@ -17,7 +19,23 @@ app.mount('#app')
 // console.log(process.env.VUE_APP_BASE_URL)
 // console.log(process.env.VUE_APP_BASE_NAME)
 
-zwRequest.request({ url: '/home/multidata', method: 'get' })
+interface DataType {
+  data: any
+  returnCode: string
+  success: boolean
+}
+
+zwRequest
+  .get<DataType>({
+    url: '/home/multidata',
+    method: 'get',
+    isShowLoading: true
+  })
+  .then((res) => {
+    console.log(res.data)
+    console.log(res.returnCode)
+    console.log(res.success)
+  })
 
 // 单独的请求拦截
 // zwRequest.request({

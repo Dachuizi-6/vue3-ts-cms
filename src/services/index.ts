@@ -7,6 +7,14 @@ const zwRequest = new ZWRequest({
   interceptors: {
     // 这里的拦截器只有当前实例才有
     requestInterceptor: (config) => {
+      // 携带token拦截
+      const token = ''
+      if (token) {
+        if (config.headers) {
+          config.headers.Authorization = `Bearer ${token}`
+        }
+      }
+
       console.log('请求成功的拦截')
       return config
     },
