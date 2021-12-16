@@ -1,0 +1,10 @@
+export const rules = {
+  num: [
+    { required: true, message: '账号必填', trigger: 'blur' },
+    { pattern: /^[a-z0-9]{5,10}$/, message: '用户名必须是5-10数字或字母' }
+  ],
+  password: [
+    { required: true, message: '密码必填', trigger: 'blur' },
+    { pattern: /^[a-z0-9]{3,}$/, message: '密码必须三位以上' }
+  ]
+}

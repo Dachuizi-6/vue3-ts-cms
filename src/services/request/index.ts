@@ -34,8 +34,6 @@ class ZWRequest {
       (config) => {
         console.log('所有实例都有的拦截器：请求成功拦截')
 
-        console.log(this.isShwoLoading)
-
         if (this.isShwoLoading) {
           this.loading = ElLoading.service({
             lock: true,
@@ -79,7 +77,7 @@ class ZWRequest {
     )
   }
 
-  request<T>(config: ZWRequestConfig): Promise<T> {
+  request<T>(config: ZWRequestConfig<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       // 对单独的请求拦截器做执行
       if (config.interceptors?.requestInterceptor) {
@@ -109,24 +107,24 @@ class ZWRequest {
     })
   }
 
-  get<T>(config: ZWRequestConfig): Promise<T> {
-    return this.request({ ...config, method: 'GET' })
+  get<T>(config: ZWRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'GET' })
   }
 
-  post<T>(config: ZWRequestConfig): Promise<T> {
-    return this.request({ ...config, method: 'POST' })
+  post<T>(config: ZWRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'POST' })
   }
 
-  delete<T>(config: ZWRequestConfig): Promise<T> {
-    return this.request({ ...config, method: 'DELETE' })
+  delete<T>(config: ZWRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'DELETE' })
   }
 
-  put<T>(config: ZWRequestConfig): Promise<T> {
-    return this.request({ ...config, method: 'PUT' })
+  put<T>(config: ZWRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'PUT' })
   }
 
-  patch<T>(config: ZWRequestConfig): Promise<T> {
-    return this.request({ ...config, method: 'PATCH' })
+  patch<T>(config: ZWRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'PATCH' })
   }
 }
 

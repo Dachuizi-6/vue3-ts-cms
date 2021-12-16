@@ -5,7 +5,8 @@ import store from './store'
 
 import zwRequest from './services'
 
-// import './assets/css/index.less'
+import 'normalize.css'
+import './assets/css/index.less'
 
 // import './services/axios.demo'
 
@@ -26,7 +27,7 @@ interface DataType {
 }
 
 zwRequest
-  .get<DataType>({
+  .request<DataType>({
     url: '/home/multidata',
     method: 'get',
     isShowLoading: true
@@ -36,6 +37,18 @@ zwRequest
     console.log(res.returnCode)
     console.log(res.success)
   })
+
+// zwRequest
+//   .get<DataType>({
+//     url: '/home/multidata',
+//     method: 'get',
+//     isShowLoading: true
+//   })
+//   .then((res) => {
+//     console.log(res.data)
+//     console.log(res.returnCode)
+//     console.log(res.success)
+//   })
 
 // 单独的请求拦截
 // zwRequest.request({
