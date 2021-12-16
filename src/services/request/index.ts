@@ -32,7 +32,7 @@ class ZWRequest {
     // 所有实例都会执行的拦截器
     this.instance.interceptors.request.use(
       (config) => {
-        console.log('所有实例都有的拦截器：请求成功拦截')
+        // console.log('所有实例都有的拦截器：请求成功拦截')
 
         if (this.isShwoLoading) {
           this.loading = ElLoading.service({
@@ -45,14 +45,14 @@ class ZWRequest {
         return config
       },
       (err) => {
-        console.log('所有实例都有的拦截器：请求失败拦截')
+        // console.log('所有实例都有的拦截器：请求失败拦截')
         return err
       }
     )
 
     this.instance.interceptors.response.use(
       (res) => {
-        console.log('所有实例都有的拦截器：响应成功拦截')
+        // console.log('所有实例都有的拦截器：响应成功拦截')
 
         this.loading?.close()
 
@@ -64,7 +64,7 @@ class ZWRequest {
         }
       },
       (err) => {
-        console.log('所有实例都有的拦截器：响应失败拦截')
+        // console.log('所有实例都有的拦截器：响应失败拦截')
         this.loading?.close()
         // switch(err.status) // 也可以用switch语句
         // if (err.response.status) {

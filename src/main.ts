@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-import zwRequest from './services'
+// import zwRequest from './services'
 
 import 'normalize.css'
 import './assets/css/index.less'
@@ -20,23 +20,23 @@ app.mount('#app')
 // console.log(process.env.VUE_APP_BASE_URL)
 // console.log(process.env.VUE_APP_BASE_NAME)
 
-interface DataType {
-  data: any
-  returnCode: string
-  success: boolean
-}
+// interface DataType {
+//   data: any
+//   returnCode: string
+//   success: boolean
+// }
 
-zwRequest
-  .request<DataType>({
-    url: '/home/multidata',
-    method: 'get',
-    isShowLoading: true
-  })
-  .then((res) => {
-    console.log(res.data)
-    console.log(res.returnCode)
-    console.log(res.success)
-  })
+// zwRequest
+//   .request<DataType>({
+//     url: '/home/multidata',
+//     method: 'get',
+//     isShowLoading: true
+//   })
+//   .then((res) => {
+//     console.log(res.data)
+//     console.log(res.returnCode)
+//     console.log(res.success)
+//   })
 
 // zwRequest
 //   .get<DataType>({
