@@ -1,6 +1,8 @@
 import ZWRequest from './request'
 import { BASE_URL, TIME_OUT } from './request/config'
 
+import localCache from '@/utils/cache'
+
 const zwRequest = new ZWRequest({
   baseURL: BASE_URL,
   timeout: TIME_OUT,
@@ -8,7 +10,7 @@ const zwRequest = new ZWRequest({
     // 这里的拦截器只有当前实例才有
     requestInterceptor: (config) => {
       // 携带token拦截
-      const token = ''
+      const token = localCache.getCache('token')
       if (token) {
         if (config.headers) {
           config.headers.Authorization = `Bearer ${token}`

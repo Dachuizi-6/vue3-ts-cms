@@ -8,12 +8,14 @@ import store from './store'
 import 'normalize.css'
 import './assets/css/index.less'
 
-// import './services/axios.demo'
+import { setupStore } from '@/store'
 
+// import './services/axios.demo'
 const app = createApp(App)
 app.use(router)
 app.use(store)
 app.mount('#app')
+setupStore()
 
 // console.log(2223333333333333)
 // console.log(process.env.NODE_ENV)
