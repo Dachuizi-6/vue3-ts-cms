@@ -5,10 +5,10 @@
       <span v-if="!isCollpase" class="title">Vue3+Ts</span>
     </div>
     <el-menu
+      :default-active="defaultActive"
       background-color="#0c2135"
       text-color="#b7bdc3"
       active-text-color="#0a60bd"
-      default-active="2"
       :collapse="isCollpase"
     >
       <template v-for="item in userMenus" :key="item.id">
@@ -20,7 +20,10 @@
               <span>{{ item.name }}</span>
             </template>
             <template v-for="subItem in item.children" :key="subItem.id">
-              <el-menu-item :index="subItem.id + ''">
+              <el-menu-item
+                :index="subItem.id + ''"
+                @click="handelMenuItemClick(subItem)"
+              >
                 <!-- <el-icon><location /></el-icon> -->
                 <span>{{ subItem.name }}</span>
               </el-menu-item>
@@ -40,11 +43,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
-
+import { defineComponent, computed, ref } from 'vue'
 import { Location } from '@element-plus/icons-vue'
 
 import { useStore } from '@/store'
+import { useRouter, useRoute } from 'vue-router'
+
+import { pathMapToMenu } from '@/utils/map-menus-to-routes'
 
 export default defineComponent({
   components: {
@@ -57,9 +62,33 @@ export default defineComponent({
     }
   },
   setup() {
+    // vuex
     const store = useStore()
     const userMenus = computed(() => store.state.login.userMenus)
-    return { userMenus }
+
+    // 路由
+    const router = useRouter()
+    // 当前路径
+    const route = useRoute()
+    const currentPath = route.path
+
+    // 当前路径获取当前的menu对象
+    const menu = pathMapToMenu(userMenus.value, currentPath)
+    // 响应式菜单
+    const defaultActive = ref(menu.id + '')
+
+    // 事件处理
+    const handelMenuItemClick = (menuItem: any) => {
+      router.push({
+        path: menuItem.url ?? 'not-found'
+      })
+    }
+
+    return {
+      userMenus,
+      handelMenuItemClick,
+      defaultActive
+    }
   }
 })
 </script>
@@ -100,7 +129,7 @@ export default defineComponent({
     }
   }
 
-  ::v-deep .el-sub-menu__title {
+  :v-deep .el-sub-menu__title {
     background-color: #001529 !important;
   }
 

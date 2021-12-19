@@ -8,7 +8,11 @@
         <el-header class="page-header">
           <nav-header @changeFold="handleChangeFold" />
         </el-header>
-        <el-main class="page-content">Main</el-main>
+        <el-main class="page-content">
+          <div class="page-info">
+            <router-view></router-view>
+          </div>
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -63,6 +67,9 @@ export default defineComponent({
         color: #333;
         text-align: center;
         background-color: #f0f2f5;
+        .page-info {
+          background-color: #fff;
+        }
       }
     }
   }

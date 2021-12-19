@@ -11,7 +11,9 @@ import {
   requestUserInfoById,
   requestUserMenusByRoleId
 } from '@/services/login/login'
+
 import localCache from '@/utils/cache'
+import { menusToRoutes } from '@/utils/map-menus-to-routes'
 
 const loginModule: Module<loginState, rootState> = {
   namespaced: true,
@@ -32,6 +34,13 @@ const loginModule: Module<loginState, rootState> = {
     },
     changeUserMenus(state, userMenus: any) {
       state.userMenus = userMenus
+
+      // 1、动态添加路由
+      const routes = menusToRoutes(userMenus)
+      // 2、把二级路由添加到一级菜单下面
+      routes.forEach((route) => {
+        router.addRoute('main', route)
+      })
     }
   },
 
