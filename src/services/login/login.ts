@@ -1,6 +1,7 @@
 import zwRequest from '../index'
 
-import { IAccount, IDataType, ILoginResult } from './types'
+import { IAccount, ILoginResult } from './types'
+import { IDataType } from '../types'
 
 enum loginApi {
   AccountLogin = '/login',

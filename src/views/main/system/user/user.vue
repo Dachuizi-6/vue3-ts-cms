@@ -1,36 +1,34 @@
 <template>
   <div class="user">
-    <zw-form v-bind="searchFormConfig" v-model="formData" />
+    <search-page :searchFormConfig="searchFormConfig"></search-page>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import ZwForm from '@/base-ui/form'
+import { defineComponent } from 'vue'
+
+import SearchPage from '@/components/search-page'
 import { searchFormConfig } from './config/search.config'
+
+import { useStore } from '@/store'
 
 export default defineComponent({
   components: {
-    ZwForm
+    SearchPage
   },
   name: 'user',
   setup() {
-    // 绑定表单组件数据
-    const formData = ref({
-      id: '',
-      name: '',
-      password: '',
-      sport: '',
-      dateRange: ''
-    })
+    const store = useStore()
 
-    console.log(formData)
+    store.dispatch('system/getPageListAction', {
+      url: '/users/list',
+      queryInfo: { offset: 0, size: 10 }
+    })
     return {
-      searchFormConfig,
-      formData
+      searchFormConfig
     }
   }
 })
 </script>
 
-<style scoped></style>
+<style scoped lang="less"></style>
