@@ -8,7 +8,7 @@ export interface rootState {
 
 interface IStateWithModule {
   login: loginState
-  user: IUserState
+  system: IUserState
 }
 
 export type IRootStateWithModule = rootState & IStateWithModule
