@@ -3,15 +3,38 @@
     <search-page :searchFormConfig="searchFormConfig"></search-page>
 
     <div class="content">
-      <zw-table :listData="userList" :propData="propList">
+      <zw-table
+        :title="title"
+        :listData="userList"
+        :propData="propList"
+        :isShowColumnIndex="isShowColumnIndex"
+        :isShowSelection="isShowSelection"
+        @selectionChange="realHandelSelectChange"
+      >
+        <!-- header中的插槽 -->
+        <template #handelHandel>
+          <el-button size="mediue" type="primary">新建用户</el-button>
+        </template>
+
+        <!-- 列中的插槽 -->
         <template #status="scope">
-          <el-button>{{ scope.row.enable ? '启用' : '禁用' }}</el-button>
+          <el-button
+            plain
+            size="mini"
+            :type="scope.row.enable ? 'success' : 'danger'"
+            >{{ scope.row.enable ? '启用' : '禁用' }}</el-button
+          >
         </template>
         <template #createAt="scope">
-          <strong>{{ scope.row.createAt }}</strong>
+          <strong>{{ $filters.formatTime(scope.row.createAt) }}</strong>
         </template>
         <template #updateAt="scope">
-          {{ scope.row.createAt }}
+          {{ $filters.formatTime(scope.row.createAt) }}
+        </template>
+        <template #handel>
+          <!-- 按钮权限有没有在这里控制：v-if -->
+          <el-button :icon="Edit" size="mini" type="text">编辑</el-button>
+          <el-button :icon="Delete" size="mini" type="text">删除</el-button>
         </template>
       </zw-table>
     </div>
@@ -20,7 +43,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-
+import { Edit, Delete } from '@element-plus/icons-vue'
 import { searchFormConfig } from './config/search.config'
 
 import { useStore } from '@/store'
@@ -44,6 +67,8 @@ export default defineComponent({
 
     const userList = computed(() => store.state.system.userList)
     // const userCount = computed(() => store.state.system.userCount)
+
+    const title = '用户列表'
 
     const propList = [
       {
@@ -78,13 +103,31 @@ export default defineComponent({
         label: '最后操作时间',
         minWidth: '120',
         slotName: 'updateAt'
+      },
+      {
+        label: '操作',
+        minWidth: '120',
+        slotName: 'handel'
       }
     ]
 
+    const isShowColumnIndex = true
+    const isShowSelection = true
+
+    const realHandelSelectChange = (selecteds: any) => {
+      console.log(selecteds) // 拿到所有的选中项
+    }
+
     return {
+      Edit,
+      Delete,
       searchFormConfig,
       userList,
-      propList
+      propList,
+      isShowColumnIndex,
+      isShowSelection,
+      realHandelSelectChange,
+      title
     }
   }
 })

@@ -10,10 +10,22 @@ import './assets/css/index.less'
 
 import { setupStore } from '@/store'
 
+// 注册全局 的东西
+import registryGlobal from '@/global'
+
+// 国际化
+import ElementPlus from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+
 // import './services/axios.demo'
 const app = createApp(App)
 
 setupStore()
+
+app.use(registryGlobal)
+app.use(ElementPlus, {
+  locale: zhCn
+})
 
 app.use(router)
 app.use(store)
