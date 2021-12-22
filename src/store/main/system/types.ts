@@ -1,4 +1,6 @@
 export interface IUserState {
-  userList: any[]
-  userCount: number
+  usersList: any[]
+  usersCount: number
+  roleList: any[]
+  roleCount: number
 }

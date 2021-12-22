@@ -3,32 +3,80 @@ import { Module } from 'vuex'
 import { rootState } from '../../types'
 import { IUserState } from './types'
 
-import { requestUserList } from '@/services/main/system/system'
+import { requestDataList } from '@/services/main/system/system'
 
 const userModule: Module<IUserState, rootState> = {
   namespaced: true, // 这个一定要写哇
   state() {
     return {
-      userList: [],
-      userCount: 0
+      usersList: [],
+      usersCount: 0,
+      roleList: [],
+      roleCount: 0
     }
   },
   mutations: {
-    changeUserList(state, userList: any[]) {
-      state.userList = userList
+    changeUsersList(state, usersList: any[]) {
+      state.usersList = usersList
     },
-    changeUserCount(state, userCount) {
-      state.userCount = userCount
+    changeUsersCount(state, usersCount) {
+      state.usersCount = usersCount
+    },
+    changeRoleList(state, roleList: any[]) {
+      state.roleList = roleList
+    },
+    changeRoleCount(state, roleCount) {
+      state.roleCount = roleCount
     }
   },
   actions: {
     async getPageListAction({ commit }, payload: any) {
-      console.log(payload)
-      const res = await requestUserList(payload.url, payload.queryInfo)
+      const pageName = payload.pageName
+      // 1、有规范的接口
+      const pageUrl = `/${pageName}/list`
+      // 2、无规范的接口
+      // switch (pageName) {
+      //   case 'users':
+      //     pageUrl = '/users/list'
+      //     break
+      //   case 'role':
+      //     pageUrl = '/role/list'
+      //     break
+      // }
+      // const res = await requestUserList(payload.url, payload.queryInfo)
+      const res = await requestDataList(pageUrl, payload.queryInfo)
       const { list, totalCount } = res.data
 
-      commit('changeUserList', list)
-      commit('changeUserCount', totalCount)
+      const myPageName = pageName.slice(0, 1).toUpperCase() + pageName.slice(1)
+
+      // 1、有规律的用法
+      commit(`change${myPageName}List`, list)
+      commit(`change${myPageName}Count`, totalCount)
+
+      // 2、switch的用法
+      // switch (pageName) {
+      //   case 'users':
+      //     commit('changeUsersList', list)
+      //     commit('changeUsersCount', totalCount)
+      //     break
+      //   case 'role':
+      //     commit('changeRoleList', list)
+      //     commit('changeRoleCount', totalCount)
+      //     break
+      // }
+    }
+  },
+  getters: {
+    getPageListData(state) {
+      return (pageName: string) => {
+        return (state as any)[`${pageName}List`]
+        // switch (pageName) {
+        //   case 'user':
+        //     return state.userList
+        //   case 'role':
+        //     return state.roleList
+        // }
+      }
     }
   }
 }

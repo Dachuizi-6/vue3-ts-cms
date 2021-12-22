@@ -6,7 +6,7 @@
       </template>
       <template #footer>
         <div class="handel-footer">
-          <el-button :icon="Refresh">重置</el-button>
+          <el-button :icon="Refresh" @click="handelReset">重置</el-button>
           <el-button :icon="Search" type="primary">搜索</el-button>
         </div>
       </template>
@@ -30,19 +30,38 @@ export default defineComponent({
   components: {
     ZwForm
   },
-  setup() {
+  setup(props) {
+    // 1、表单绑定属性由用户决定
+    const formItems = props.searchFormConfig.formItems ?? []
+    const formOrigin: any = {}
+    for (const item of formItems) {
+      formOrigin[item.field] = ''
+    }
+    const formData = ref(formOrigin)
+
+    // 2、点击按钮重置
+    const handelReset = () => {
+      // 第一种实现
+      // for (const key in formOrigin) {
+      //   formData.value[key] = formOrigin[key]
+      // }
+
+      // 第二种实现
+      formData.value = formOrigin
+    }
     // 绑定表单组件数据
-    const formData = ref({
-      id: '',
-      name: '',
-      password: '',
-      sport: '',
-      dateRange: ''
-    })
+    // const formData = ref({
+    //   id: '',
+    //   name: '',
+    //   password: '',
+    //   sport: '',
+    //   dateRange: ''
+    // })
     return {
       formData,
       Refresh,
-      Search
+      Search,
+      handelReset
     }
   }
 })

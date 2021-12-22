@@ -10,9 +10,9 @@ export function formatUtcTime(time: string, format: string = DEFAULT_FORMAT) {
   return dayjs.utc(time).format(format)
 }
 
-export function formatTimeStamp(
-  timestamp: number,
-  format: string = DEFAULT_FORMAT
-) {
-  return ''
-}
+// export function formatTimeStamp(
+//   timestamp: number,
+//   format: string = DEFAULT_FORMAT
+// ) {
+//   return ''
+// }

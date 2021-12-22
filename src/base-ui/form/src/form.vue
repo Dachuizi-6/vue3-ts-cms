@@ -13,17 +13,27 @@
               <template
                 v-if="item.type === 'input' || item.type === 'password'"
               >
-                <el-input
+                <!-- 第一种实现双向数据绑定 -->
+                <!-- <el-input
                   :placeholder="item.placeholder"
                   :show-password="item.type === 'password'"
                   v-bind="item.otherOptions"
                   v-model="formData[`${item.field}`]"
                 >
+                </el-input> -->
+                <!-- 第二种实现表单双向数据绑定 -->
+                <el-input
+                  :placeholder="item.placeholder"
+                  :show-password="item.type === 'password'"
+                  v-bind="item.otherOptions"
+                  :model-value="modelValue[item.field]"
+                  @update:modelValue="handelChange($event, item.field)"
+                >
                 </el-input>
               </template>
               <!-- 判断选择框 -->
               <template v-else-if="item.type === 'select'">
-                <el-select
+                <!-- <el-select
                   :placeholder="item.placeholder"
                   style="width: 100%"
                   v-bind="item.otherOptions"
@@ -36,14 +46,36 @@
                   >
                     {{ option.title }}
                   </el-option>
+                </el-select> -->
+                <el-select
+                  :placeholder="item.placeholder"
+                  style="width: 100%"
+                  v-bind="item.otherOptions"
+                  :model-value="modelValue[item.field]"
+                  @update:modelValue="handelChange($event, item.field)"
+                >
+                  <el-option
+                    v-for="option in item.options"
+                    :key="option.title"
+                    :value="option.value"
+                  >
+                    {{ option.title }}
+                  </el-option>
                 </el-select>
               </template>
               <!-- 判断日期框 -->
               <template v-else-if="item.type === 'datePicker'">
-                <el-date-picker
+                <!-- <el-date-picker
                   v-bind="item.otherOptions"
                   style="width: 100%"
                   v-model="formData[`${item.field}`]"
+                >
+                </el-date-picker> -->
+                <el-date-picker
+                  v-bind="item.otherOptions"
+                  style="width: 100%"
+                  :model-value="modelValue[item.field]"
+                  @update:modelValue="handelChange($event, item.field)"
                 >
                 </el-date-picker>
               </template>
@@ -59,7 +91,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, watch } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 import { IFormItem } from '../types'
 
@@ -88,25 +120,32 @@ export default defineComponent({
         sm: 24,
         md: 12,
         lg: 8,
-        xl: 6
+        xl: 8 // 大屏的时候也一行也显示三个（比较好看）
       })
     }
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
-    const formData = ref({ ...props.modelValue })
-    watch(
-      formData,
-      (newValue) => {
-        console.log(newValue)
-        emit('update:modelValue', newValue)
-      },
-      {
-        deep: true
-      }
-    )
+    // 第一种实现双向数据绑定
+    // const formData = ref({ ...props.modelValue })
+    // watch(
+    //   formData,
+    //   (newValue) => {
+    //     console.log(newValue)
+    //     emit('update:modelValue', newValue)
+    //   },
+    //   {
+    //     deep: true
+    //   }
+    // )
+
+    // 第二种实现双向数据绑定
+    const handelChange = (newValue: any, field: string) => {
+      emit('update:modelValue', { ...props.modelValue, [field]: newValue })
+    }
     return {
-      formData
+      // formData
+      handelChange
     }
   }
 })
