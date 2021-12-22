@@ -59,19 +59,24 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
 
-    store.dispatch('system/getPageListAction', {
-      // url: '/users/list',
-      pageName: props.pageName,
-      queryInfo: { offset: 0, size: 10 }
-    })
+    const getPageData = (searchData: any = {}) => {
+      store.dispatch('system/getPageListAction', {
+        // url: '/users/list',
+        pageName: props.pageName,
+        queryInfo: { ...searchData, offset: 0, size: 10 }
+      })
+    }
 
-    // const userList = computed(() => store.state.system.userList)
-    // const userCount = computed(() => store.state.system.userCount)
+    getPageData()
 
     const dataList = computed(() =>
       store.getters['system/getPageListData'](props.pageName)
     )
 
+    // const userList = computed(() => store.state.system.userList)
+    // const userCount = computed(() => store.state.system.userCount)
+
+    // 处理选中
     const realHandelSelectChange = (selecteds: any) => {
       console.log(selecteds) // 拿到所有的选中项
     }
@@ -80,7 +85,8 @@ export default defineComponent({
       Edit,
       Delete,
       realHandelSelectChange,
-      dataList
+      dataList,
+      getPageData
     }
   }
 })

@@ -9,35 +9,35 @@ export const searchFormConfig: IForm = {
   },
   formItems: [
     {
-      field: 'id',
-      label: 'ID',
-      type: 'input',
-      placeholder: '请输入id'
-    },
-    {
       field: 'name',
       label: '用户名',
       type: 'input',
       placeholder: '请输入用户名'
     },
     {
-      field: 'password',
-      label: '密码',
-      type: 'password',
-      placeholder: '请输入密码'
+      field: 'realname',
+      label: '真实姓名',
+      type: 'input',
+      placeholder: '请输入真实姓名'
     },
     {
-      field: 'sport',
-      label: '喜欢的运动',
+      field: 'cellphone',
+      label: '电话号码',
+      type: 'input',
+      placeholder: '请输入电话号码'
+    },
+    {
+      field: 'enable',
+      label: '状态',
       type: 'select',
-      placeholder: '请选择喜欢的运动',
+      placeholder: '请选择状态',
       options: [
-        { title: '篮球', value: 'basketball' },
-        { title: '足球', value: 'football' }
+        { title: '启用', value: 1 },
+        { title: '禁用', value: 0 }
       ]
     },
     {
-      field: 'dateRange',
+      field: 'createAt',
       label: '请选择时间',
       type: 'datePicker',
       otherOptions: {

@@ -1,9 +1,14 @@
 <template>
   <div class="role">
-    <page-search :searchFormConfig="searchFormConfig"></page-search>
+    <page-search
+      :searchFormConfig="searchFormConfig"
+      @handleResetCall="handleResetReal"
+      @handelSearchCall="handelSearchReal"
+    ></page-search>
     <page-content
       :tableContentConfig="tableContentConfig"
       pageName="role"
+      ref="pageContentRef"
     ></page-content>
   </div>
 </template>
@@ -17,6 +22,8 @@ import PageSearch from '@/components/search-page'
 import { tableContentConfig } from './config/table.config'
 import { searchFormConfig } from './config/search.config'
 
+import { useSearchHook } from '@/hooks/use-search'
+
 export default defineComponent({
   components: {
     PageContent,
@@ -24,9 +31,14 @@ export default defineComponent({
   },
   name: 'role',
   setup() {
+    const [pageContentRef, handleResetReal, handelSearchReal] = useSearchHook()
+
     return {
       tableContentConfig,
-      searchFormConfig
+      searchFormConfig,
+      pageContentRef,
+      handleResetReal,
+      handelSearchReal
     }
   }
 })

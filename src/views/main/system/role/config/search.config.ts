@@ -12,7 +12,7 @@ export const searchFormConfig: IForm = {
       field: 'intro',
       label: '权限范围',
       type: 'select',
-      placeholder: '请选择喜欢的运动',
+      placeholder: '请选择权限',
       options: [
         { title: '所有权限', value: 'all' },
         { title: '日常事物', value: 'daily' },

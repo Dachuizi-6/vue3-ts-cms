@@ -41,7 +41,7 @@
     </el-table>
     <div class="footer">
       <slot name="footer">
-        <!-- <el-pagination
+        <el-pagination
           v-model:currentPage="currentPage4"
           :page-sizes="[100, 200, 300, 400]"
           :page-size="100"
@@ -50,7 +50,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         >
-        </el-pagination> -->
+        </el-pagination>
       </slot>
     </div>
   </div>
