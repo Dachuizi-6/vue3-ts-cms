@@ -13,7 +13,7 @@ import {
 } from '@/services/login/login'
 
 import localCache from '@/utils/cache'
-import { menusToRoutes } from '@/utils/map-menus-to-routes'
+import { menusToRoutes, mapMenusToPerssions } from '@/utils/map-menus-to-routes'
 
 const loginModule: Module<loginState, rootState> = {
   namespaced: true,
@@ -21,7 +21,8 @@ const loginModule: Module<loginState, rootState> = {
     return {
       token: '',
       userInfo: {},
-      userMenus: []
+      userMenus: [],
+      permissions: []
     }
   },
 
@@ -41,6 +42,10 @@ const loginModule: Module<loginState, rootState> = {
       routes.forEach((route) => {
         router.addRoute('main', route)
       })
+
+      // 2、获取按钮权限
+      const permissions = mapMenusToPerssions(userMenus)
+      state.permissions = permissions
     }
   },
 

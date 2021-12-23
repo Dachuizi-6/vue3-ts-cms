@@ -4,4 +4,6 @@ export interface loginState {
   userInfo: any
 
   userMenus: any
+
+  permissions: string[]
 }

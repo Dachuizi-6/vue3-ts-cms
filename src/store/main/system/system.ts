@@ -12,7 +12,11 @@ const userModule: Module<IUserState, rootState> = {
       usersList: [],
       usersCount: 0,
       roleList: [],
-      roleCount: 0
+      roleCount: 0,
+      goodsList: [],
+      goodsCount: 0,
+      menuList: [],
+      menuCount: 0
     }
   },
   mutations: {
@@ -27,6 +31,18 @@ const userModule: Module<IUserState, rootState> = {
     },
     changeRoleCount(state, roleCount) {
       state.roleCount = roleCount
+    },
+    changeGoodsList(state, goodsList: any[]) {
+      state.goodsList = goodsList
+    },
+    changeGoodsCount(state, goodsCount) {
+      state.goodsCount = goodsCount
+    },
+    changeMenuList(state, menuList: any[]) {
+      state.menuList = menuList
+    },
+    changeMenuCount(state, menuCount) {
+      state.menuCount = menuCount
     }
   },
   actions: {
@@ -76,6 +92,11 @@ const userModule: Module<IUserState, rootState> = {
         //   case 'role':
         //     return state.roleList
         // }
+      }
+    },
+    getPageCountData(state) {
+      return (pageName: string) => {
+        return (state as any)[`${pageName}Count`]
       }
     }
   }

@@ -2,12 +2,16 @@
   <div class="page-content">
     <zw-table
       :listData="dataList"
+      :listCount="dataCount"
       v-bind="tableContentConfig"
       @selectionChange="realHandelSelectChange"
+      v-model:page="pageInfo"
     >
       <!-- header中的插槽 -->
       <template #handelHandel>
-        <el-button size="medium" type="primary">新建用户</el-button>
+        <el-button v-if="isCreate" size="medium" type="primary"
+          >新建用户</el-button
+        >
       </template>
 
       <!-- 列中的插槽 -->
@@ -27,20 +31,37 @@
       </template>
       <template #handel>
         <!-- 按钮权限有没有在这里控制：v-if -->
-        <el-button :icon="Edit" size="mini" type="text">编辑</el-button>
-        <el-button :icon="Delete" size="mini" type="text">删除</el-button>
+        <el-button v-if="isUpdate" :icon="Edit" size="mini" type="text"
+          >编辑</el-button
+        >
+        <el-button v-if="isDelete" :icon="Delete" size="mini" type="text"
+          >删除</el-button
+        >
+      </template>
+
+      <!-- 动态插槽 -->
+      <template
+        v-for="dSlot in dongtaiSlot"
+        :key="dSlot.prop"
+        #[dSlot.slotName]="scoped"
+      >
+        <template v-if="dSlot.slotName">
+          <slot :name="dSlot.slotName" :row="scoped.row"></slot>
+        </template>
       </template>
     </zw-table>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref, watch } from 'vue'
 import { Edit, Delete } from '@element-plus/icons-vue'
 
 import { useStore } from '@/store'
 
 import ZwTable from '@/base-ui/table'
+
+import { usePermissions } from '@/hooks/use-permissions'
 
 export default defineComponent({
   components: {
@@ -59,34 +80,71 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
 
+    // 6、按钮权限处理
+    const isCreate = usePermissions(props.pageName, 'create')
+    const isDelete = usePermissions(props.pageName, 'delete')
+    const isUpdate = usePermissions(props.pageName, 'update')
+    const isQuery = usePermissions(props.pageName, 'query')
+
+    // 4、处理分页
+    const pageInfo = ref({
+      currentPage: 1,
+      pageSize: 10
+    })
+    watch(pageInfo, () => getPageData())
+
+    // 1、触发action发送异步请求
     const getPageData = (searchData: any = {}) => {
+      if (!isQuery) return
       store.dispatch('system/getPageListAction', {
         // url: '/users/list',
         pageName: props.pageName,
-        queryInfo: { ...searchData, offset: 0, size: 10 }
+        queryInfo: {
+          ...searchData,
+          offset: (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
+          size: pageInfo.value.pageSize
+        }
       })
     }
-
     getPageData()
 
+    ///2、获取store里面的数据
     const dataList = computed(() =>
       store.getters['system/getPageListData'](props.pageName)
+    )
+    const dataCount = computed(() =>
+      store.getters['system/getPageCountData'](props.pageName)
     )
 
     // const userList = computed(() => store.state.system.userList)
     // const userCount = computed(() => store.state.system.userCount)
 
-    // 处理选中
+    // 3、处理选中
     const realHandelSelectChange = (selecteds: any) => {
       console.log(selecteds) // 拿到所有的选中项
     }
 
+    // 4、动态插槽
+    const dongtaiSlot = props.tableContentConfig.propData.filter(
+      (item: any) => {
+        if (item.slotName === 'createAt') return false
+        if (item.slotName === 'updateAt') return false
+        if (item.slotName === 'handel') return false
+        return true
+      }
+    )
     return {
       Edit,
       Delete,
       realHandelSelectChange,
       dataList,
-      getPageData
+      dataCount,
+      getPageData,
+      pageInfo,
+      dongtaiSlot,
+      isCreate,
+      isDelete,
+      isUpdate
     }
   }
 })

@@ -71,6 +71,23 @@ export function pathMapToMenu(
   }
 }
 
+// 4、获取按钮权限
+export function mapMenusToPerssions(userMenus: any[]) {
+  const permissions: any[] = []
+
+  function deepGetPerssion(menus: any[]) {
+    for (const item of menus) {
+      if (item.type === 1 || item.type === 2) {
+        deepGetPerssion(item.children ?? [])
+      } else if (item.type === 3) {
+        permissions.push(item.permission)
+      }
+    }
+  }
+  deepGetPerssion(userMenus)
+  return permissions
+}
+
 // // 3、获取面包屑数据
 // export function pathMapToBreadCrumb(userMenus: any[], currentPath: string) {
 //   const braedCrumbArray: IBreadCrumb[] = []

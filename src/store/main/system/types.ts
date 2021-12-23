@@ -3,4 +3,8 @@ export interface IUserState {
   usersCount: number
   roleList: any[]
   roleCount: number
+  goodsList: any[]
+  goodsCount: number
+  menuList: any[]
+  menuCount: number
 }

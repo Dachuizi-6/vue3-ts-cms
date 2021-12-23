@@ -13,6 +13,7 @@
       border
       style="width: 100%"
       @selection-change="handelSelection"
+      v-bind="expandRow"
     >
       <el-table-column
         type="selection"
@@ -39,14 +40,14 @@
         </el-table-column>
       </template>
     </el-table>
-    <div class="footer">
+    <div class="footer" v-if="isShowFooter">
       <slot name="footer">
         <el-pagination
-          v-model:currentPage="currentPage4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :currentPage="page.currentPage"
+          :page-size="page.pageSize"
+          :total="listCount"
+          :page-sizes="[10, 20, 30]"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         >
@@ -61,6 +62,18 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
+    page: {
+      type: Object,
+      default: () => ({ pageSize: 10, currentPage: 1 })
+    },
+    expandRow: {
+      type: Object,
+      default: () => ({})
+    },
+    isShowFooter: {
+      type: Boolean,
+      default: true
+    },
     title: {
       type: String,
       default: ''
@@ -68,6 +81,10 @@ export default defineComponent({
     listData: {
       type: Array,
       required: true
+    },
+    listCount: {
+      type: Number,
+      default: 0
     },
     propData: {
       type: Array,
@@ -82,12 +99,26 @@ export default defineComponent({
       default: true
     }
   },
-  emits: ['selectionChange'],
-  setup(prop, { emit }) {
+  emits: ['selectionChange', 'update:page'],
+  setup(props, { emit }) {
+    // 1、处理选中
     const handelSelection = (select: any) => {
       emit('selectionChange', select)
     }
-    return { handelSelection }
+
+    // 处理分页
+    const handleSizeChange = (pageSize: number) => {
+      emit('update:page', { ...props.page, pageSize })
+    }
+    const handleCurrentChange = (currentPage: number) => {
+      emit('update:page', { ...props.page, currentPage })
+    }
+
+    return {
+      handelSelection,
+      handleSizeChange,
+      handleCurrentChange
+    }
   }
 })
 </script>
