@@ -11,6 +11,8 @@
       pageName="users"
       ref="pageContentRef"
     ></page-content>
+
+    <page-modal :modalFormConfig="modalFormConfig"></page-modal>
   </div>
 </template>
 
@@ -19,16 +21,19 @@ import { defineComponent } from 'vue'
 
 import SearchPage from '@/components/search-page'
 import PageContent from '@/components/page-content'
+import PageModal from '@/components/page-modal'
 
 import { searchFormConfig } from './config/search.config'
 import { tableContentConfig } from './config/table.config'
+import { modalFormConfig } from './config/modal.config'
 
 import { useSearchHook } from '@/hooks/use-search'
 
 export default defineComponent({
   components: {
     SearchPage,
-    PageContent
+    PageContent,
+    PageModal
   },
   name: 'user',
   setup() {
@@ -39,7 +44,8 @@ export default defineComponent({
       tableContentConfig,
       pageContentRef,
       handleResetReal,
-      handelSearchReal
+      handelSearchReal,
+      modalFormConfig
     }
   }
 })

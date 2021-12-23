@@ -3,7 +3,7 @@ import { Module } from 'vuex'
 import { rootState } from '../../types'
 import { IUserState } from './types'
 
-import { requestDataList } from '@/services/main/system/system'
+import { requestDataList, deletePageData } from '@/services/main/system/system'
 
 const userModule: Module<IUserState, rootState> = {
   namespaced: true, // 这个一定要写哇
@@ -46,6 +46,7 @@ const userModule: Module<IUserState, rootState> = {
     }
   },
   actions: {
+    // 1、获取页面数据的异步action
     async getPageListAction({ commit }, payload: any) {
       const pageName = payload.pageName
       // 1、有规范的接口
@@ -80,6 +81,22 @@ const userModule: Module<IUserState, rootState> = {
       //     commit('changeRoleCount', totalCount)
       //     break
       // }
+    },
+    // /pageName/id
+    async deletePageDataAction({ dispatch }, payload: any) {
+      const { pageName, id } = payload
+
+      const pageUrl = `/${pageName}/${id}`
+
+      await deletePageData(pageUrl)
+
+      dispatch('getPageListAction', {
+        pageName,
+        queryInfo: {
+          offset: 0,
+          size: 10
+        }
+      })
     }
   },
   getters: {

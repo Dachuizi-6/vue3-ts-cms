@@ -29,12 +29,17 @@
       <template #updateAt="scope">
         {{ $filters.formatTime(scope.row.createAt) }}
       </template>
-      <template #handel>
+      <template #handel="scope">
         <!-- 按钮权限有没有在这里控制：v-if -->
         <el-button v-if="isUpdate" :icon="Edit" size="mini" type="text"
           >编辑</el-button
         >
-        <el-button v-if="isDelete" :icon="Delete" size="mini" type="text"
+        <el-button
+          v-if="isDelete"
+          :icon="Delete"
+          size="mini"
+          type="text"
+          @click="handelDelete(scope.row)"
           >删除</el-button
         >
       </template>
@@ -133,6 +138,15 @@ export default defineComponent({
         return true
       }
     )
+
+    // 7、点击删除
+    const handelDelete = (row: any) => {
+      store.dispatch('system/deletePageDataAction', {
+        pageName: props.pageName,
+        id: row.id
+      })
+    }
+
     return {
       Edit,
       Delete,
@@ -144,7 +158,8 @@ export default defineComponent({
       dongtaiSlot,
       isCreate,
       isDelete,
-      isUpdate
+      isUpdate,
+      handelDelete
     }
   }
 })
