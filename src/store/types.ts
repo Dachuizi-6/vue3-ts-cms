@@ -4,6 +4,8 @@ import { IUserState } from './main/system/types'
 export interface rootState {
   name: string
   age: number
+  allDepList: any[]
+  allRoleList: any[]
 }
 
 interface IStateWithModule {

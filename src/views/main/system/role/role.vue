@@ -17,7 +17,7 @@
 import { defineComponent } from 'vue'
 
 import PageContent from '@/components/page-content'
-import PageSearch from '@/components/search-page'
+import PageSearch from '@/components/page-search'
 
 import { tableContentConfig } from './config/table.config'
 import { searchFormConfig } from './config/search.config'

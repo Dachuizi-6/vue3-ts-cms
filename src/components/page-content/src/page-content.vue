@@ -9,9 +9,14 @@
     >
       <!-- header中的插槽 -->
       <template #handelHandel>
-        <el-button v-if="isCreate" size="medium" type="primary"
-          >新建用户</el-button
+        <el-button
+          v-if="isCreate"
+          size="medium"
+          type="primary"
+          @click="handelAdd"
         >
+          新建用户
+        </el-button>
       </template>
 
       <!-- 列中的插槽 -->
@@ -31,9 +36,15 @@
       </template>
       <template #handel="scope">
         <!-- 按钮权限有没有在这里控制：v-if -->
-        <el-button v-if="isUpdate" :icon="Edit" size="mini" type="text"
-          >编辑</el-button
+        <el-button
+          v-if="isUpdate"
+          :icon="Edit"
+          size="mini"
+          type="text"
+          @click="handelEdit(scope.row)"
         >
+          编辑
+        </el-button>
         <el-button
           v-if="isDelete"
           :icon="Delete"
@@ -82,7 +93,8 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props) {
+  emits: ['handelAddCall', 'handelEditCall'],
+  setup(props, { emit }) {
     const store = useStore()
 
     // 6、按钮权限处理
@@ -147,6 +159,14 @@ export default defineComponent({
       })
     }
 
+    // 8、点击新建、编辑
+    const handelAdd = () => {
+      emit('handelAddCall')
+    }
+    const handelEdit = (row: any) => {
+      emit('handelEditCall', row)
+    }
+
     return {
       Edit,
       Delete,
@@ -159,7 +179,9 @@ export default defineComponent({
       isCreate,
       isDelete,
       isUpdate,
-      handelDelete
+      handelDelete,
+      handelAdd,
+      handelEdit
     }
   }
 })
