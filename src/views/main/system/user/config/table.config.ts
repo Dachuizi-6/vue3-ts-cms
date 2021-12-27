@@ -15,7 +15,7 @@ export const tableContentConfig = {
       prop: 'enable',
       label: '状态',
       minWidth: '100',
-      slotName: 'status'
+      slotName: 'enable'
     },
     {
       prop: 'cellphone',

@@ -51,7 +51,7 @@ const store = createStore<rootState>({
 
 export function setupStore() {
   store.dispatch('login/reloadLocalData')
-  store.dispatch('getPageDataList')
+  // store.dispatch('getPageDataList')
 }
 
 export function useStore(): Store<IRootStateWithModule> {

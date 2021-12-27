@@ -10,10 +10,8 @@
       <zw-form v-bind="modalFormConfig" v-model="formData"></zw-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="dialogVisible = false"
-            >Confirm</el-button
-          >
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="handelAddNew">确定</el-button>
         </span>
       </template>
     </el-dialog>
@@ -22,6 +20,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
+import { useStore } from '@/store'
 
 import ZwForm from '@/base-ui/form'
 
@@ -37,12 +36,16 @@ export default defineComponent({
     editInfo: {
       type: Object,
       default: () => ({})
+    },
+    pageName: {
+      type: String,
+      required: true
     }
   },
   setup(props) {
     const dialogVisible = ref(false)
+    // 1、监听父组件传递过来的数据
     const formData = ref<any>({})
-
     watch(
       () => props.editInfo,
       (newVal) => {
@@ -53,9 +56,30 @@ export default defineComponent({
       }
     )
 
+    // 2、点击确定
+    const store = useStore()
+    const handelAddNew = () => {
+      dialogVisible.value = false
+      if (!Object.keys(props.editInfo).length) {
+        // 新建
+        store.dispatch('system/addNewPageData', {
+          pageName: props.pageName,
+          addData: { ...formData.value }
+        })
+      } else {
+        // 编辑
+        store.dispatch('system/editPageData', {
+          pageName: props.pageName,
+          id: props.editInfo.id,
+          editData: { ...formData.value }
+        })
+      }
+    }
+
     return {
       dialogVisible,
-      formData
+      formData,
+      handelAddNew
     }
   }
 })
