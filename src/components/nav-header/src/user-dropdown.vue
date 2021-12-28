@@ -31,9 +31,9 @@ export default defineComponent({
     const name = computed(() => store.state.login.userInfo.name)
 
     const handelEdit = () => {
-      localCache.clearCache()
+      localCache.deleteCache('token')
       router.push({
-        path: '/login'
+        path: '/main'
       })
     }
 

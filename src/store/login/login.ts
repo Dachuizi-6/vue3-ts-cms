@@ -50,7 +50,7 @@ const loginModule: Module<loginState, rootState> = {
   },
 
   actions: {
-    async accountLoginAction({ commit }, payload: IAccount) {
+    async accountLoginAction({ commit, dispatch }, payload: IAccount) {
       console.log('触发登录action', payload)
 
       // 1、去登录
@@ -58,6 +58,9 @@ const loginModule: Module<loginState, rootState> = {
       const { id, token } = loginResult.data
       commit('changeToken', token)
       localCache.setCache('token', token)
+
+      // **确保有token之后再发起请求部门和角色数据**
+      dispatch('getPageDataList', null, { root: true })
 
       //2、登录成功之后：获取用户信息
       const userInfoResult = await requestUserInfoById(id)
@@ -79,10 +82,12 @@ const loginModule: Module<loginState, rootState> = {
     // }
 
     // 解决刷新登录信息丢失的token
-    reloadLocalData({ commit }) {
+    reloadLocalData({ commit, dispatch }) {
       const token = localCache.getCache('token')
       if (token) {
         commit('changeToken', token)
+        // **确保有token之后再发起请求部门和角色数据**
+        dispatch('getPageDataList', null, { root: true })
       }
 
       const userInfo = localCache.getCache('userInfo')

@@ -3,7 +3,12 @@ import { Module } from 'vuex'
 import { rootState } from '../../types'
 import { IUserState } from './types'
 
-import { requestDataList, deletePageData } from '@/services/main/system/system'
+import {
+  requestDataList,
+  deletePageData,
+  editPageData,
+  addNewPageData
+} from '@/services/main/system/system'
 
 const userModule: Module<IUserState, rootState> = {
   namespaced: true, // 这个一定要写哇
@@ -46,7 +51,7 @@ const userModule: Module<IUserState, rootState> = {
     }
   },
   actions: {
-    // 1、获取页面数据的异步action
+    // 1、获取页面数据的异步action。配置决定，可以请求每个菜单的数据
     async getPageListAction({ commit }, payload: any) {
       const pageName = payload.pageName
       // 1、有规范的接口
@@ -82,7 +87,7 @@ const userModule: Module<IUserState, rootState> = {
       //     break
       // }
     },
-    // /pageName/id
+    // 2、删除每个菜单也的一条条数据。配置决定。/pageName/id
     async deletePageDataAction({ dispatch }, payload: any) {
       const { pageName, id } = payload
 
@@ -90,6 +95,32 @@ const userModule: Module<IUserState, rootState> = {
 
       await deletePageData(pageUrl)
 
+      dispatch('getPageListAction', {
+        pageName,
+        queryInfo: {
+          offset: 0,
+          size: 10
+        }
+      })
+    },
+
+    // 3、编辑每个菜单也面的数据。配置决定
+    async editPageData({ dispatch }, payload) {
+      console.log('编辑payload', payload)
+      const { pageName, id, editData } = payload
+      await editPageData(`/${pageName}/${id}`, editData)
+      dispatch('getPageListAction', {
+        pageName,
+        queryInfo: {
+          offset: 0,
+          size: 10
+        }
+      })
+    },
+    async addNewPageData({ dispatch }, payload) {
+      console.log('新建payload', payload)
+      const { pageName, addData } = payload
+      await addNewPageData(`/${pageName}`, addData)
       dispatch('getPageListAction', {
         pageName,
         queryInfo: {

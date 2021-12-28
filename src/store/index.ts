@@ -4,6 +4,7 @@ import { rootState, IRootStateWithModule } from './types'
 
 import login from './login/login'
 import system from './main/system/system'
+import dashboard from './main/analysis/dashboard'
 
 import { requestDataList } from '@/services/main/system/system'
 
@@ -13,7 +14,8 @@ const store = createStore<rootState>({
       name: 'zohnny',
       age: 20,
       allDepList: [],
-      allRoleList: []
+      allRoleList: [],
+      allMenuList: []
     }
   },
   mutations: {
@@ -22,6 +24,9 @@ const store = createStore<rootState>({
     },
     changeAllRoleList(state, list) {
       state.allRoleList = list
+    },
+    changeMenuList(state, list) {
+      state.allMenuList = list
     }
   },
   actions: {
@@ -38,20 +43,25 @@ const store = createStore<rootState>({
       })
       const { list: roleList } = roleListRes.data
 
+      const menuListRes = await requestDataList('/menu/list', {})
+      const { list: menuList } = menuListRes.data
+
       commit('changeAllDepList', depList)
       commit('changeAllRoleList', roleList)
+      commit('changeMenuList', menuList)
     }
   },
   getters: {},
   modules: {
     login,
-    system
+    system,
+    dashboard
   }
 })
 
 export function setupStore() {
   store.dispatch('login/reloadLocalData')
-  store.dispatch('getPageDataList')
+  // store.dispatch('getPageDataList')
 }
 
 export function useStore(): Store<IRootStateWithModule> {

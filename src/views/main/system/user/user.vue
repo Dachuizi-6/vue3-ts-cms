@@ -12,18 +12,30 @@
       ref="pageContentRef"
       @handelAddCall="handelAddReal"
       @handelEditCall="handelEditReal"
-    ></page-content>
+    >
+      <template #enable="scope">
+        <el-button
+          plain
+          size="mini"
+          :type="scope.row.enable ? 'success' : 'danger'"
+        >
+          {{ scope.row.enable ? '启用' : '禁用' }}
+        </el-button>
+      </template>
+    </page-content>
 
     <page-modal
-      :modalFormConfig="modalFormConfig"
+      :modalFormConfig="modalFormConfigRef"
       ref="pageModelRef"
       :editInfo="editInfo"
+      pageName="users"
     ></page-modal>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
+import { useStore } from '@/store'
 
 import PageSearch from '@/components/page-search'
 import PageContent from '@/components/page-content'
@@ -46,23 +58,43 @@ export default defineComponent({
   setup() {
     const [pageContentRef, handleResetReal, handelSearchReal] = useSearchHook()
 
+    // 1、控制密码框的显示与隐藏
     const addCallbcak = () => {
       const hiddenItem = modalFormConfig.formItems.find(
         (item) => item.field === 'password'
       )
-
       hiddenItem!.isHidden = false
     }
-
     const editCallback = () => {
       const hiddenItem = modalFormConfig.formItems.find(
         (item) => item.field === 'password'
       )
       hiddenItem!.isHidden = true
     }
-
     const [pageModelRef, editInfo, handelAddReal, handelEditReal] =
       useModalHook(addCallbcak, editCallback)
+
+    // 2、动态展示部门和角色数据
+    const store = useStore()
+    const modalFormConfigRef = computed(() => {
+      const departmentList = store.state.allDepList
+      const roleList = store.state.allRoleList
+      const departmentIdItem = modalFormConfig.formItems.find(
+        (item) => item.field === 'departmentId'
+      )
+      const roleIdItem = modalFormConfig.formItems.find(
+        (item) => item.field === 'roleId'
+      )
+      departmentIdItem!.options = departmentList.map((dep) => ({
+        title: dep.name,
+        value: dep.id
+      }))
+      roleIdItem!.options = roleList.map((role) => ({
+        title: role.name,
+        value: role.id
+      }))
+      return modalFormConfig
+    })
 
     return {
       searchFormConfig,
@@ -70,7 +102,7 @@ export default defineComponent({
       pageContentRef,
       handleResetReal,
       handelSearchReal,
-      modalFormConfig,
+      modalFormConfigRef,
       pageModelRef,
       handelAddReal,
       handelEditReal,

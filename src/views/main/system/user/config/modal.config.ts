@@ -30,6 +30,20 @@ export const modalFormConfig: IForm = {
       label: '电话号码',
       type: 'input',
       placeholder: '请输入电话号码'
+    },
+    {
+      field: 'departmentId',
+      label: '部门',
+      type: 'select',
+      placeholder: '请选择部门',
+      options: []
+    },
+    {
+      field: 'roleId',
+      label: '角色',
+      type: 'select',
+      placeholder: '请选择角色',
+      options: []
     }
   ]
 }
