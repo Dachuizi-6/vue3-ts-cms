@@ -8,6 +8,7 @@
       destroy-on-close
     >
       <zw-form v-bind="modalFormConfig" v-model="formData"></zw-form>
+      <slot></slot>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">取消</el-button>
@@ -37,6 +38,10 @@ export default defineComponent({
       type: Object,
       default: () => ({})
     },
+    otherInfo: {
+      type: Object,
+      default: () => ({})
+    },
     pageName: {
       type: String,
       required: true
@@ -52,7 +57,7 @@ export default defineComponent({
         for (const item of props.modalFormConfig.formItems) {
           formData.value[item.field] = newVal[item.field]
         }
-        formData.value = newVal
+        // formData.value = newVal
       }
     )
 
@@ -64,14 +69,14 @@ export default defineComponent({
         // 新建
         store.dispatch('system/addNewPageData', {
           pageName: props.pageName,
-          addData: { ...formData.value }
+          addData: { ...formData.value, ...props.otherInfo }
         })
       } else {
         // 编辑
         store.dispatch('system/editPageData', {
           pageName: props.pageName,
           id: props.editInfo.id,
-          editData: { ...formData.value }
+          editData: { ...formData.value, ...props.otherInfo }
         })
       }
     }

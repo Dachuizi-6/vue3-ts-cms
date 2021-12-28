@@ -6,6 +6,7 @@ export interface rootState {
   age: number
   allDepList: any[]
   allRoleList: any[]
+  allMenuList: any[]
 }
 
 interface IStateWithModule {

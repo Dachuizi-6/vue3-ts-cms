@@ -88,6 +88,23 @@ export function mapMenusToPerssions(userMenus: any[]) {
   return permissions
 }
 
+// 5、角色权限映射到eltree
+export function mapRoleToTree(menuList: any[]) {
+  const leafKeys: number[] = []
+
+  function getLeafKeys(menuList: any[]) {
+    for (const item of menuList) {
+      if (item.children) {
+        getLeafKeys(item.children)
+      } else {
+        leafKeys.push(item.id)
+      }
+    }
+  }
+  getLeafKeys(menuList)
+  return leafKeys
+}
+
 // // 3、获取面包屑数据
 // export function pathMapToBreadCrumb(userMenus: any[], currentPath: string) {
 //   const braedCrumbArray: IBreadCrumb[] = []
