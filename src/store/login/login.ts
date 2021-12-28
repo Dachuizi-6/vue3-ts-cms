@@ -58,7 +58,6 @@ const loginModule: Module<loginState, rootState> = {
       const { id, token } = loginResult.data
       commit('changeToken', token)
       localCache.setCache('token', token)
-
       // **确保有token之后再发起请求部门和角色数据**
       dispatch('getPageDataList', null, { root: true })
 
@@ -69,10 +68,11 @@ const loginModule: Module<loginState, rootState> = {
       localCache.setCache('userInfo', userInfo)
 
       // 2、登录成功之后：获取用户菜单
-      const userMenusResult = await requestUserMenusByRoleId(userInfo.id)
+      const userMenusResult = await requestUserMenusByRoleId(userInfo.role.id)
       const userMenus = userMenusResult.data
       commit('changeUserMenus', userMenus)
       localCache.setCache('userMenus', userMenus)
+      console.log(userMenus)
 
       // 跳转首页
       router.push('/main')

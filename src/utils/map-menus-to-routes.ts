@@ -20,23 +20,19 @@ export function menusToRoutes(menus: any[]): RouteRecordRaw[] {
         const route = allRoutes.find((route) => route.path === menu.url)
         if (route) {
           routes.push(route)
-
-          if (!firstMenu) {
-            // route是每个人一定有的
-            firstMenu = route // 从跟路劲默认跳转第一个菜单进入首页
-          }
         }
-        // if (!firstMenu) {
-        //   firstMenu = menu
-        // }
-      } else if (menu.type === 1) {
+        if (!firstMenu) {
+          // route是每个人一定有的
+          firstMenu = route // 从跟路劲默认跳转第一个菜单进入首页
+        }
+        // } else if (menu.type === 1) {
+      } else {
         mapMenuToRoute(menu.children)
       }
     }
   }
 
   mapMenuToRoute(menus)
-
   return routes
 }
 
