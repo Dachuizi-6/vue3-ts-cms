@@ -25,11 +25,15 @@ const roseOptions = computed(() => {
         saveAsImage: { show: true }
       }
     },
+    tooltip: {
+      trigger: 'item'
+    },
     series: [
       {
-        name: 'Nightingale Chart',
+        name: '分类商品数量',
         type: 'pie',
         radius: [10, 150],
+        // radius: '50%',
         center: ['50%', '50%'],
         roseType: 'area',
         itemStyle: {
