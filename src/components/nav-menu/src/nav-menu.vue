@@ -2,7 +2,7 @@
   <div class="nav-menu">
     <div class="logo">
       <img class="img" src="~@/assets/img/logo.svg" alt="logo" />
-      <span v-if="!isCollpase" class="title">Vue3+Ts</span>
+      <span v-if="!isCollpase" class="title">Zohnny</span>
     </div>
     <el-menu
       :default-active="defaultActive"

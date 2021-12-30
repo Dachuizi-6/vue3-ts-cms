@@ -7,7 +7,9 @@
         </zw-card>
       </el-col>
       <el-col :span="10">
-        <zw-card title="不同城市商品销量"></zw-card>
+        <zw-card title="不同城市商品销量">
+          <map-echart :mapData="mapData"></map-echart>
+        </zw-card>
       </el-col>
       <el-col :span="7">
         <zw-card title="分类商品数量（玫瑰图）">
@@ -39,6 +41,7 @@ import { PieEchart } from '@/components/page-echarts'
 import { RoseEchart } from '@/components/page-echarts'
 import { LineEchart } from '@/components/page-echarts'
 import { BarEchart } from '@/components/page-echarts'
+import { MapEchart } from '@/components/page-echarts'
 
 export default defineComponent({
   components: {
@@ -46,7 +49,8 @@ export default defineComponent({
     PieEchart,
     RoseEchart,
     LineEchart,
-    BarEchart
+    BarEchart,
+    MapEchart
   },
   name: 'dashboard',
   setup() {
@@ -74,7 +78,6 @@ export default defineComponent({
         xLabels.push(item.name)
         values.push(item.goodsCount)
       }
-      console.log(xLabels, values)
       return {
         xLabels,
         values
@@ -90,17 +93,30 @@ export default defineComponent({
         xLabels.push(item.name)
         values.push(item.goodsFavor)
       }
-
       return {
         xLabels,
         values
       }
     })
 
+    // 地图
+    const mapData = computed(() => {
+      const addressGoodsSale = store.state.dashboard.addressGoodsSale.map(
+        (item) => {
+          return {
+            name: item.address,
+            value: item.count
+          }
+        }
+      )
+      return addressGoodsSale
+    })
+
     return {
       pieData,
       lineData,
-      barData
+      barData,
+      mapData
     }
   }
 })

@@ -16,6 +16,12 @@ const barOptions = computed(() => {
     tooltip: {
       trigger: 'item'
     },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
     title: {},
     xAxis: {
       data: props.xLabels,
